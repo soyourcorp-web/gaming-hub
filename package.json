@@ -1,0 +1,18 @@
+{
+  "name": "gaming-hub-propositions",
+  "version": "1.0.0",
+  "description": "Application de gestion des propositions de jeux avec DM Discord automatiques",
+  "main": "index.js",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Build complete'"
+  },
+  "keywords": ["discord", "gaming", "propositions"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {}
+}
