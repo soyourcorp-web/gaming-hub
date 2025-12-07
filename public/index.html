@@ -1,1688 +1,658 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gaming Hub - Propositions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: #000000;
-            background-image: 
-                radial-gradient(ellipse at top, rgba(0, 180, 219, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom, rgba(0, 180, 219, 0.03) 0%, transparent 50%);
-            min-height: 100vh;
-            color: #ffffff;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Lignes de grille cyberpunk en arrière-plan */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(rgba(0, 180, 219, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 180, 219, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Header avec style AUTOMATION HUB */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 60px;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(0, 180, 219, 0.2);
-        }
-
-        .app-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2em;
-            font-weight: 700;
-            letter-spacing: 8px;
-            color: #00b4db;
-            text-transform: uppercase;
-        }
-
-        .status-bar {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 0.9em;
-            color: #8b9ca8;
-        }
-
-        .status-online {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-online::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: #00ff88;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff88;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* En-tête principal */
-        .main-header {
-            text-align: center;
-            margin-bottom: 80px;
-            position: relative;
-        }
-
-        .main-header::before,
-        .main-header::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 150px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #00b4db, transparent);
-        }
-
-        .main-header::before {
-            right: calc(50% + 400px);
-        }
-
-        .main-header::after {
-            left: calc(50% + 400px);
-        }
-
-        .main-header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5em;
-            font-weight: 900;
-            letter-spacing: 12px;
-            text-transform: uppercase;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-
-        .main-header p {
-            color: #8b9ca8;
-            font-size: 1.1em;
-            letter-spacing: 2px;
-        }
-
-        /* Coins décoratifs cyan */
-        .corner-decoration {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #00b4db;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .corner-decoration.top-left {
-            top: 30px;
-            left: 30px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .corner-decoration.top-right {
-            top: 30px;
-            right: 30px;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .corner-decoration.bottom-left {
-            bottom: 30px;
-            left: 30px;
-            border-right: none;
-            border-top: none;
-        }
-
-        .corner-decoration.bottom-right {
-            bottom: 30px;
-            right: 30px;
-            border-left: none;
-            border-top: none;
-        }
-
-        /* Cartes style cyberpunk */
-        .cyber-card {
-            background: rgba(15, 25, 35, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 180, 219, 0.3);
-            border-radius: 0;
-            padding: 40px;
-            box-shadow: 
-                0 0 20px rgba(0, 180, 219, 0.1),
-                inset 0 0 60px rgba(0, 180, 219, 0.02);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .cyber-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #00b4db, transparent);
-        }
-
-        .cyber-card:hover {
-            border-color: rgba(0, 180, 219, 0.6);
-            box-shadow: 
-                0 0 30px rgba(0, 180, 219, 0.2),
-                inset 0 0 60px rgba(0, 180, 219, 0.04);
-            transform: translateY(-2px);
-        }
-
-        /* Formulaire */
-        .form-group {
-            margin-bottom: 30px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 12px;
-            color: #00b4db;
-            font-weight: 600;
-            font-size: 0.95em;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 15px 20px;
-            background: rgba(0, 20, 30, 0.6);
-            border: 1px solid rgba(0, 180, 219, 0.3);
-            border-radius: 0;
-            color: #ffffff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #00b4db;
-            box-shadow: 0 0 20px rgba(0, 180, 219, 0.2);
-            background: rgba(0, 30, 40, 0.8);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Boutons cyber */
-        .cyber-btn {
-            background: transparent;
-            color: #00b4db;
-            padding: 18px 40px;
-            border: 2px solid #00b4db;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1em;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 180, 219, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .cyber-btn:hover::before {
-            left: 100%;
-        }
-
-        .cyber-btn:hover {
-            background: rgba(0, 180, 219, 0.1);
-            box-shadow: 0 0 30px rgba(0, 180, 219, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .cyber-btn:active {
-            transform: translateY(0);
-        }
-
-        .cyber-btn-primary {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(0, 180, 219, 0.2), rgba(0, 100, 150, 0.2));
-            border-color: #00b4db;
-        }
-
-        /* Grille de propositions */
-        .proposals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .proposal-card {
-            background: rgba(10, 20, 30, 0.8);
-            border: 1px solid rgba(0, 180, 219, 0.3);
-            padding: 30px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .proposal-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #00b4db, transparent);
-        }
-
-        .proposal-card:hover {
-            border-color: #00b4db;
-            box-shadow: 0 0 40px rgba(0, 180, 219, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .proposal-header {
-            border-bottom: 1px solid rgba(0, 180, 219, 0.2);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .proposal-pseudo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #00b4db;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-        }
-
-        .proposal-game {
-            font-size: 1.2em;
-            color: #ffffff;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-
-        .proposal-info {
-            margin: 15px 0;
-            color: #8b9ca8;
-            line-height: 1.8;
-        }
-
-        .proposal-info strong {
-            color: #00b4db;
-            font-weight: 600;
-        }
-
-        .proposal-link {
-            color: #00b4db;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-        }
-
-        .proposal-link:hover {
-            text-shadow: 0 0 10px #00b4db;
-        }
-
-        /* Badges de statut */
-        .status-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            font-size: 0.85em;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: 15px;
-            border: 1px solid;
-        }
-
-        .status-pending {
-            background: rgba(255, 193, 7, 0.1);
-            color: #ffc107;
-            border-color: #ffc107;
-        }
-
-        .status-accepted {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-            border-color: #00ff88;
-        }
-
-        .status-rejected {
-            background: rgba(244, 67, 54, 0.1);
-            color: #f44336;
-            border-color: #f44336;
-        }
-
-        /* Actions */
-        .proposal-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn-accept, .btn-reject {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid;
-            background: transparent;
-            cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .btn-accept {
-            color: #00ff88;
-            border-color: #00ff88;
-        }
-
-        .btn-accept:hover {
-            background: rgba(0, 255, 136, 0.1);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-        }
-
-        .btn-reject {
-            color: #ff4444;
-            border-color: #ff4444;
-        }
-
-        .btn-reject:hover {
-            background: rgba(255, 68, 68, 0.1);
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: rgba(0, 180, 219, 0.05);
-            border: 1px solid rgba(0, 180, 219, 0.3);
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            background: rgba(0, 180, 219, 0.1);
-            border-color: #00b4db;
-        }
-
-        .stat-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3em;
-            font-weight: 900;
-            color: #00b4db;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            color: #8b9ca8;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9em;
-        }
-
-        /* Calendrier */
-        .calendar {
-            background: rgba(10, 20, 30, 0.6);
-            border: 1px solid rgba(0, 180, 219, 0.3);
-            padding: 40px;
-            margin-top: 40px;
-        }
-
-        .calendar h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00b4db;
-            font-size: 1.5em;
-            letter-spacing: 4px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        .calendar-event {
-            background: rgba(0, 180, 219, 0.05);
-            border-left: 3px solid #00b4db;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .calendar-event:hover {
-            background: rgba(0, 180, 219, 0.1);
-            transform: translateX(5px);
-        }
-
-        .calendar-event strong {
-            color: #00b4db;
-            font-weight: 700;
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: rgba(10, 20, 30, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid #00b4db;
-            padding: 20px 30px;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 0 30px rgba(0, 180, 219, 0.3);
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .notification.success {
-            border-color: #00ff88;
-            color: #00ff88;
-        }
-
-        .notification.error {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-
-        /* Login */
-        .login-container {
-            max-width: 500px;
-            margin: 100px auto;
-        }
-
-        /* Admin header */
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .admin-header h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00b4db;
-            font-size: 1.8em;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .admin-badges {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            background: rgba(0, 180, 219, 0.1);
-            border: 1px solid #00b4db;
-            color: #00b4db;
-            padding: 10px 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .logout-btn {
-            background: transparent;
-            color: #ff4444;
-            padding: 10px 25px;
-            border: 2px solid #ff4444;
-            cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 68, 68, 0.1);
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
-        }
-
-        .test-btn {
-            background: transparent;
-            color: #00b4db;
-            padding: 10px 20px;
-            border: 1px solid #00b4db;
-            cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            letter-spacing: 2px;
-            font-size: 0.85em;
-            transition: all 0.3s ease;
-        }
-
-        .test-btn:hover {
-            background: rgba(0, 180, 219, 0.1);
-            box-shadow: 0 0 15px rgba(0, 180, 219, 0.3);
-        }
-
-        /* Lien admin */
-        .admin-link {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .admin-link a {
-            color: #00b4db;
-            text-decoration: none;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-        }
-
-        .admin-link a:hover {
-            text-shadow: 0 0 10px #00b4db;
-        }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            color: #5a6c7a;
-            font-size: 1.1em;
-        }
-
-        /* Required */
-        .required {
-            color: #ff4444;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .proposals-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .main-header h1 {
-                font-size: 1.8em;
-                letter-spacing: 6px;
-            }
-            
-            .main-header::before,
-            .main-header::after {
-                display: none;
-            }
-            
-            .corner-decoration {
-                width: 25px;
-                height: 25px;
-            }
-        }
-
-        /* Modale cyberpunk */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal {
-            background: rgba(10, 20, 30, 0.95);
-            border: 2px solid #00b4db;
-            max-width: 700px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 
-                0 0 60px rgba(0, 180, 219, 0.4),
-                inset 0 0 80px rgba(0, 180, 219, 0.05);
-            animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                transform: scale(0.8) translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            padding: 30px;
-            border-bottom: 1px solid rgba(0, 180, 219, 0.3);
-            position: relative;
-        }
-
-        .modal-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #00b4db, transparent);
-        }
-
-        .modal-header h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00b4db;
-            font-size: 1.5em;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .modal-subheader {
-            color: #8b9ca8;
-            font-size: 1.1em;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            background: transparent;
-            border: 2px solid #ff4444;
-            color: #ff4444;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 1.5em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 68, 68, 0.1);
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
-            transform: rotate(90deg);
-        }
-
-        .modal-body {
-            padding: 30px;
-        }
-
-        .modal-section {
-            margin-bottom: 30px;
-        }
-
-        .modal-section-title {
-            color: #00b4db;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1em;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(0, 180, 219, 0.2);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            background: rgba(0, 180, 219, 0.05);
-            border-left: 2px solid #00b4db;
-            padding: 15px;
-        }
-
-        .info-label {
-            color: #00b4db;
-            font-size: 0.85em;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            color: #ffffff;
-            font-size: 1.1em;
-        }
-
-        .modal-form-group {
-            margin-bottom: 25px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(0, 180, 219, 0.2);
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid;
-            background: transparent;
-            cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 1em;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn-accept {
-            color: #00ff88;
-            border-color: #00ff88;
-        }
-
-        .modal-btn-accept:hover {
-            background: rgba(0, 255, 136, 0.1);
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
-        }
-
-        .modal-btn-reject {
-            color: #ff4444;
-            border-color: #ff4444;
-        }
-
-        .modal-btn-reject:hover {
-            background: rgba(255, 68, 68, 0.1);
-            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4);
-        }
-
-        .modal-btn-cancel {
-            color: #8b9ca8;
-            border-color: #8b9ca8;
-        }
-
-        .modal-btn-cancel:hover {
-            background: rgba(139, 156, 168, 0.1);
-        }
-
-        .char-count {
-            text-align: right;
-            color: #8b9ca8;
-            font-size: 0.85em;
-            margin-top: 5px;
-        }
-
-        /* Message preview */
-        .message-preview {
-            background: rgba(0, 180, 219, 0.05);
-            border: 1px solid rgba(0, 180, 219, 0.2);
-            padding: 20px;
-            margin-top: 15px;
-            font-style: italic;
-            color: #8b9ca8;
-        }
-
-        .message-preview strong {
-            color: #00b4db;
-        }
-    </style>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automation Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: #000000;
+      color: #FFFFFF;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .grid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0, 128, 255, 0.03) 50px, rgba(0, 128, 255, 0.03) 51px),
+        repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0, 128, 255, 0.03) 50px, rgba(0, 128, 255, 0.03) 51px);
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    .holographic-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 128, 255, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .landing-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 128, 255, 0.3);
+      z-index: 100;
+      padding: 20px 7.6923%;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-section {
+      position: relative;
+    }
+
+    .logo-glow {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: radial-gradient(circle, rgba(0, 128, 255, 0.4) 0%, transparent 70%);
+      filter: blur(15px);
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: #00D4FF;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ff00;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+      box-shadow: 0 0 10px #00ff00;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .status-text {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .hero-section {
+      padding: 180px 7.6923% 100px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .title-line {
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation: lineExpand 2s ease-in-out infinite;
+    }
+
+    @keyframes lineExpand {
+      0%, 100% { transform: scaleX(1); opacity: 0.5; }
+      50% { transform: scaleX(1.2); opacity: 1; }
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      color: #FFFFFF;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 30px rgba(0, 212, 255, 0.8); }
+      50% { text-shadow: 0 0 50px rgba(0, 212, 255, 1); }
+    }
+
+    .apps-section {
+      padding: 80px 7.6923% 120px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .holographic-tablet {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      background: rgba(0, 20, 40, 0.4);
+      backdrop-filter: blur(20px);
+      padding: 60px;
+      box-shadow: 
+        0 0 60px rgba(0, 212, 255, 0.3),
+        inset 0 0 60px rgba(0, 212, 255, 0.1);
+    }
+
+    .tablet-border-top,
+    .tablet-border-right,
+    .tablet-border-bottom,
+    .tablet-border-left {
+      position: absolute;
+      background: linear-gradient(90deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation: borderScan 3s linear infinite;
+    }
+
+    .tablet-border-top {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+    }
+
+    .tablet-border-right {
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation-delay: 0.75s;
+    }
+
+    .tablet-border-bottom {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      animation-delay: 1.5s;
+    }
+
+    .tablet-border-left {
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation-delay: 2.25s;
+    }
+
+    @keyframes borderScan {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    .tablet-corners .corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #00D4FF;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    }
+
+    .corner-tl {
+      top: -2px;
+      left: -2px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .corner-tr {
+      top: -2px;
+      right: -2px;
+      border-left: none;
+      border-bottom: none;
+    }
+
+    .corner-bl {
+      bottom: -2px;
+      left: -2px;
+      border-right: none;
+      border-top: none;
+    }
+
+    .corner-br {
+      bottom: -2px;
+      right: -2px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+    }
+
+    .app-card {
+      position: relative;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 32px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: cardFadeIn 0.6s ease forwards;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .app-card:nth-child(1) { animation-delay: 0s; }
+    .app-card:nth-child(2) { animation-delay: 0.1s; }
+    .app-card:nth-child(3) { animation-delay: 0.2s; }
+
+    .app-card.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .app-card:not(.disabled):hover {
+      transform: translateY(-5px);
+      border-color: #00D4FF;
+      box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+    }
+
+    .card-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .app-card:hover .card-border {
+      border-color: #00D4FF;
+      box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .card-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .app-card:hover .card-glow {
+      width: 200%;
+      height: 200%;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      font-size: 32px;
+      color: #00D4FF;
+      padding: 12px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4D4D4D;
+    }
+
+    .status-indicator.active {
+      background: #00D4FF;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    .card-status-text {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+
+    .card-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
+    }
+
+    .card-action {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: #00D4FF;
+      border: 2px solid #00D4FF;
+      border-radius: 0;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .app-card:hover .card-action {
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .landing-footer {
+      position: relative;
+      z-index: 2;
+      padding: 40px 7.6923% 60px;
+    }
+
+    .footer-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      margin-bottom: 40px;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-text {
+      text-align: center;
+    }
+
+    .footer-text p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    .footer-logo {
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-img {
+      height: 60px;
+      opacity: 0.9;
+      transition: all 0.3s ease;
+    }
+
+    .footer-logo-img:hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .landing-header {
+        padding: 20px;
+      }
+      
+      .nav-links {
+        gap: 16px;
+      }
+      
+      .hero-section {
+        padding: 140px 20px 80px;
+      }
+      
+      .hero-title {
+        font-size: 32px;
+        letter-spacing: 4px;
+      }
+      
+      .holographic-tablet {
+        padding: 30px 20px;
+      }
+      
+      .apps-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Coins décoratifs -->
-    <div class="corner-decoration top-left"></div>
-    <div class="corner-decoration top-right"></div>
-    <div class="corner-decoration bottom-left"></div>
-    <div class="corner-decoration bottom-right"></div>
+  <div class="grid-background"></div>
+  <div class="holographic-overlay"></div>
 
-    <div id="app"></div>
-    <div id="notification" class="notification"></div>
+  <header class="landing-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-glow"></div>
+        <h1 class="brand-title">AUTOMATION HUB</h1>
+      </div>
+      <nav class="nav-links">
+        <div class="status-text">
+          <span class="status-dot"></span>
+          EN LIGNE
+        </div>
+        <div class="status-text" id="datetime"></div>
+      </nav>
+    </div>
+  </header>
 
-    <script>
-        // Configuration
-        const ADMIN_PASSWORD = 'elbe2024';
-        
-        // URL de votre fonction Netlify (à modifier après déploiement)
-        const NETLIFY_FUNCTION_URL = '/.netlify/functions/discord-handler'; // En local
-        // Après déploiement, ce sera automatiquement : https://votre-site.netlify.app/.netlify/functions/discord-handler
-        
-        // Storage keys
-        const PROPOSALS_KEY = 'gameProposals';
-        const AUTH_KEY = 'adminAuth';
-        
-        // Utility Functions
-        function loadProposals() {
-            try {
-                const stored = localStorage.getItem(PROPOSALS_KEY);
-                return stored ? JSON.parse(stored) : [];
-            } catch (error) {
-                console.error('Erreur chargement propositions:', error);
-                return [];
-            }
-        }
-        
-        // App State
-        let currentView = 'public';
-        let proposals = loadProposals();
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="title-container">
+        <div class="title-line"></div>
+        <h2 class="hero-title">SÉLECTIONNEZ VOTRE APPLICATION</h2>
+        <div class="title-line"></div>
+      </div>
+    </div>
+  </section>
 
-        // More Utility Functions
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
+  <section class="apps-section">
+    <div class="holographic-tablet">
+      <div class="tablet-border-top"></div>
+      <div class="tablet-border-right"></div>
+      <div class="tablet-border-bottom"></div>
+      <div class="tablet-border-left"></div>
+      
+      <div class="apps-grid">
+        <!-- Gaming Hub Propositions -->
+        <a href="/gaming-hub.html" class="app-card">
+          <div class="card-border"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-header">
+            <div class="card-icon">🎮</div>
+            <div class="card-status">
+              <div class="status-indicator active"></div>
+              <span class="card-status-text">ACTIF</span>
+            </div>
+          </div>
+          
+          <h3 class="card-title">Gaming Hub</h3>
+          <p class="card-description">Gérez les propositions de jeux avec envoi automatique de DM Discord et synchronisation calendrier</p>
+          
+          <div class="card-action">
+            LANCER L'APPLICATION ›
+          </div>
+        </a>
 
-        function saveProposals() {
-            localStorage.setItem(PROPOSALS_KEY, JSON.stringify(proposals));
-        }
-        
-        function isNetlifyEnabled() {
-            return NETLIFY_FUNCTION_URL && NETLIFY_FUNCTION_URL.length > 0;
-        }
-        
-        async function syncWithNetlify(action, data) {
-            if (!isNetlifyEnabled()) {
-                console.log('Netlify non configuré - mode local uniquement');
-                return true;
-            }
-            
-            try {
-                console.log('📤 Envoi à Netlify:', action, data);
-                
-                const payload = {
-                    action: action,
-                    ...data
-                };
-                
-                const response = await fetch(NETLIFY_FUNCTION_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-                
-                console.log('📥 Réponse Netlify:', response.status);
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Réponse:', result);
-                    return true;
-                } else {
-                    console.warn('⚠️ Erreur:', response.status);
-                    return false;
-                }
-                
-            } catch (error) {
-                console.error('❌ Erreur Netlify:', error);
-                return false;
-            }
-        }
+        <!-- Steam Calendar -->
+        <a href="/steam-calendar.html" class="app-card">
+          <div class="card-border"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-header">
+            <div class="card-icon">📅</div>
+            <div class="card-status">
+              <div class="status-indicator active"></div>
+              <span class="card-status-text">ACTIF</span>
+            </div>
+          </div>
+          
+          <h3 class="card-title">Calendrier Steam</h3>
+          <p class="card-description">Synchronisez automatiquement les dates de sortie des jeux Steam avec votre Google Calendar</p>
+          
+          <div class="card-action">
+            LANCER L'APPLICATION ›
+          </div>
+        </a>
 
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
+        <!-- Prochainement -->
+        <div class="app-card disabled">
+          <div class="card-border"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-header">
+            <div class="card-icon">⚡</div>
+            <div class="card-status">
+              <div class="status-indicator"></div>
+              <span class="card-status-text">BIENTÔT DISPONIBLE</span>
+            </div>
+          </div>
+          
+          <h3 class="card-title">Prochainement</h3>
+          <p class="card-description">De nouveaux outils d'automatisation sont en cours de développement</p>
+        </div>
+      </div>
+      
+      <div class="tablet-corners">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+      </div>
+    </div>
+  </section>
 
-        function isAuthenticated() {
-            return localStorage.getItem(AUTH_KEY) === 'true';
-        }
+  <footer class="landing-footer">
+    <div class="footer-divider"></div>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="https://drive.google.com/uc?export=view&id=1jwiHkCoHYDEf4R7ir91aELRmcyp_vwFk" alt="SoYour Corp" class="footer-logo-img">
+      </div>
+      <div class="footer-text">
+        <p>© 2025 SoYour Corp. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
 
-        function setAuthenticated(value) {
-            localStorage.setItem(AUTH_KEY, value.toString());
-        }
+  <script>
+    function updateDateTime() {
+      var now = new Date();
+      var timeString = now.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('datetime').textContent = timeString;
+    }
 
-        // Public Form View
-        function renderPublicForm() {
-            const currentTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            
-            return `
-                <div class="top-bar">
-                    <div class="app-title">GAMING HUB</div>
-                    <div class="status-bar">
-                        <div class="status-online">EN LIGNE</div>
-                        <div>${currentTime}</div>
-                    </div>
-                </div>
-                
-                <div class="container">
-                    <div class="main-header">
-                        <h1>PROPOSEZ VOTRE SESSION</h1>
-                        <p>Remplissez le formulaire pour proposer une partie</p>
-                    </div>
-                    
-                    <div class="cyber-card" style="max-width: 800px; margin: 0 auto;">
-                        <form id="proposalForm">
-                            <div class="form-group">
-                                <label>PSEUDO <span class="required">*</span></label>
-                                <input type="text" id="pseudo" required placeholder="Votre pseudo">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>EMAIL <span class="required">*</span></label>
-                                <input type="email" id="email" required placeholder="votre@email.com">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>NOM DU JEU <span class="required">*</span></label>
-                                <input type="text" id="gameName" required placeholder="Ex: Valorant, Minecraft...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>LIEN DU JEU</label>
-                                <input type="url" id="gameLink" placeholder="https://...">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>DATE PROPOSÉE <span class="required">*</span></label>
-                                <input type="date" id="gameDate" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>HORAIRE <span class="required">*</span></label>
-                                <input type="time" id="gameTime" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>NOTES / COMMENTAIRES</label>
-                                <textarea id="notes" placeholder="Détails supplémentaires..."></textarea>
-                            </div>
-                            
-                            <button type="submit" class="cyber-btn cyber-btn-primary">ENVOYER LA PROPOSITION</button>
-                        </form>
-                    </div>
-                    
-                    <div class="admin-link">
-                        <a href="#" onclick="showLogin(); return false;">🔐 ACCÈS ADMIN</a>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Login View
-        function renderLogin() {
-            return `
-                <div class="top-bar">
-                    <div class="app-title">GAMING HUB</div>
-                </div>
-                
-                <div class="login-container">
-                    <div class="cyber-card">
-                        <h2 style="text-align: center; color: #00b4db; margin-bottom: 30px; font-family: 'Orbitron', sans-serif; letter-spacing: 4px;">CONNEXION ADMIN</h2>
-                        <form id="loginForm">
-                            <div class="form-group">
-                                <label>MOT DE PASSE</label>
-                                <input type="password" id="password" required placeholder="Entrez le mot de passe">
-                            </div>
-                            <button type="submit" class="cyber-btn cyber-btn-primary">SE CONNECTER</button>
-                            <div style="text-align: center; margin-top: 20px;">
-                                <a href="#" onclick="showPublicForm(); return false;" style="color: #00b4db; text-decoration: none;">← RETOUR</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Admin Dashboard View
-        function renderAdminDashboard() {
-            const validProposals = proposals.filter(p => p && p.status);
-            const pendingProposals = validProposals.filter(p => p.status === 'pending');
-            const acceptedProposals = validProposals.filter(p => p.status === 'accepted');
-            const rejectedProposals = validProposals.filter(p => p.status === 'rejected');
-            
-            const currentTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            
-            return `
-                <div class="top-bar">
-                    <div class="app-title">GAMING HUB</div>
-                    <div class="status-bar">
-                        <div class="status-online">EN LIGNE</div>
-                        <div>${currentTime}</div>
-                    </div>
-                </div>
-                
-                <div class="container" style="max-width: 1600px;">
-                    <div class="admin-header">
-                        <h2>TABLEAU DE BORD</h2>
-                        <div class="admin-badges">
-                            ${isNetlifyEnabled() ? 
-                                '<span class="badge">🚀 NETLIFY + DISCORD</span>' :
-                                '<span class="badge">💾 MODE LOCAL</span>'
-                            }
-                            <button onclick="logout()" class="logout-btn">DÉCONNEXION</button>
-                        </div>
-                    </div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-number">${pendingProposals.length}</div>
-                            <div class="stat-label">En attente</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${acceptedProposals.length}</div>
-                            <div class="stat-label">Acceptées</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number">${rejectedProposals.length}</div>
-                            <div class="stat-label">Refusées</div>
-                        </div>
-                    </div>
-                    
-                    <h3 style="color: #00b4db; font-family: 'Orbitron', sans-serif; letter-spacing: 3px; margin: 40px 0 20px; text-transform: uppercase;">📥 Propositions en Attente</h3>
-                    <div class="proposals-grid">
-                        ${pendingProposals.length > 0 ? 
-                            pendingProposals.map(proposal => renderProposalCard(proposal)).join('') :
-                            '<div class="cyber-card empty-state">Aucune proposition en attente</div>'
-                        }
-                    </div>
-                    
-                    <div class="calendar">
-                        <h3>📅 SESSIONS PROGRAMMÉES</h3>
-                        ${acceptedProposals.length > 0 ?
-                            acceptedProposals.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time))
-                                .map(p => `
-                                    <div class="calendar-event">
-                                        <strong>${p.pseudo}</strong> - ${p.gameName}<br>
-                                        📅 ${formatDate(p.date)} à ${p.time}
-                                    </div>
-                                `).join('') :
-                            '<div class="empty-state">Aucune session programmée</div>'
-                        }
-                    </div>
-                    
-                    ${validProposals.filter(p => p.status !== 'pending').length > 0 ? `
-                        <h3 style="color: #00b4db; font-family: 'Orbitron', sans-serif; letter-spacing: 3px; margin: 60px 0 20px; text-transform: uppercase;">📜 Historique</h3>
-                        <div class="proposals-grid">
-                            ${validProposals.filter(p => p.status !== 'pending')
-                                .map(proposal => renderProposalCard(proposal)).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        function renderProposalCard(proposal) {
-            return `
-                <div class="proposal-card">
-                    <div class="proposal-header">
-                        <div class="proposal-pseudo">${proposal.pseudo}</div>
-                        <div class="proposal-game">🎮 ${proposal.gameName}</div>
-                        <span class="status-badge status-${proposal.status}">
-                            ${proposal.status === 'pending' ? '⏳ EN ATTENTE' : 
-                              proposal.status === 'accepted' ? '✅ ACCEPTÉ' : '❌ REFUSÉ'}
-                        </span>
-                    </div>
-                    
-                    <div class="proposal-info">
-                        <strong>📅 DATE:</strong> ${formatDate(proposal.date)}<br>
-                        <strong>🕐 HORAIRE:</strong> ${proposal.time}<br>
-                        ${proposal.gameLink ? `<a href="${proposal.gameLink}" target="_blank" class="proposal-link">🔗 LIEN DU JEU</a><br>` : ''}
-                        ${proposal.notes ? `<strong>📝 NOTES:</strong> ${proposal.notes}<br>` : ''}
-                        <small style="color: #5a6c7a;">✉️ ${proposal.email}</small>
-                    </div>
-                    
-                    ${proposal.status === 'pending' ? `
-                        <div class="proposal-actions">
-                            <button class="btn-accept" onclick="acceptProposal('${proposal.id}')">
-                                ✅ ACCEPTER
-                            </button>
-                            <button class="btn-reject" onclick="rejectProposal('${proposal.id}')">
-                                ❌ REFUSER
-                            </button>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('fr-FR', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-        }
-
-        // Event Handlers
-        function handleProposalSubmit(e) {
-            e.preventDefault();
-            
-            const proposal = {
-                id: generateId(),
-                pseudo: document.getElementById('pseudo').value,
-                email: document.getElementById('email').value,
-                gameName: document.getElementById('gameName').value,
-                gameLink: document.getElementById('gameLink').value,
-                date: document.getElementById('gameDate').value,
-                time: document.getElementById('gameTime').value,
-                notes: document.getElementById('notes').value,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            };
-            
-            proposals.push(proposal);
-            saveProposals();
-            syncWithNetlify('add', proposal);
-            
-            showNotification('✅ Proposition envoyée avec succès !', 'success');
-            document.getElementById('proposalForm').reset();
-            document.getElementById('gameDate').min = new Date().toISOString().split('T')[0];
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-            
-            if (password === ADMIN_PASSWORD) {
-                setAuthenticated(true);
-                showAdminDashboard();
-                showNotification('✅ Connexion réussie !', 'success');
-            } else {
-                showNotification('❌ Mot de passe incorrect', 'error');
-            }
-        }
-
-        function acceptProposal(id) {
-            const proposal = proposals.find(p => p && p.id === id);
-            if (!proposal) {
-                showNotification('❌ Proposition introuvable', 'error');
-                return;
-            }
-            
-            showAcceptModal(proposal);
-        }
-
-        function rejectProposal(id) {
-            const proposal = proposals.find(p => p && p.id === id);
-            if (!proposal) {
-                showNotification('❌ Proposition introuvable', 'error');
-                return;
-            }
-            
-            showRejectModal(proposal);
-        }
-        
-        function showAcceptModal(proposal) {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay active';
-            modal.id = 'acceptModal';
-            
-            modal.innerHTML = `
-                <div class="modal">
-                    <div class="modal-header">
-                        <h3>✅ Accepter la proposition</h3>
-                        <div class="modal-subheader">Personnalisez les détails avant validation</div>
-                        <button class="modal-close" onclick="closeModal('acceptModal')">×</button>
-                    </div>
-                    
-                    <div class="modal-body">
-                        <div class="modal-section">
-                            <div class="modal-section-title">📋 Informations du joueur</div>
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <div class="info-label">Pseudo</div>
-                                    <div class="info-value">${proposal.pseudo}</div>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-label">Email</div>
-                                    <div class="info-value">${proposal.email}</div>
-                                </div>
-                                <div class="info-item" style="grid-column: 1 / -1;">
-                                    <div class="info-label">Jeu</div>
-                                    <div class="info-value">${proposal.gameName}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modal-section">
-                            <div class="modal-section-title">📅 Modifier la session</div>
-                            
-                            <div class="modal-form-group">
-                                <label>DATE PROPOSÉE</label>
-                                <input type="date" id="modal-accept-date" value="${proposal.date}">
-                            </div>
-                            
-                            <div class="modal-form-group">
-                                <label>HORAIRE</label>
-                                <input type="time" id="modal-accept-time" value="${proposal.time}">
-                            </div>
-                        </div>
-                        
-                        <div class="modal-section">
-                            <div class="modal-section-title">✉️ Message de confirmation</div>
-                            
-                            <div class="modal-form-group">
-                                <label>MESSAGE PERSONNALISÉ</label>
-                                <textarea id="modal-accept-message" rows="5" maxlength="500">Salut ${proposal.pseudo} !
-
-Ta proposition pour jouer à ${proposal.gameName} a été acceptée ! 🎮
-
-Rendez-vous le [DATE] à [HEURE].
-
-À bientôt !</textarea>
-                                <div class="char-count"><span id="accept-char-count">0</span>/500</div>
-                            </div>
-                            
-                            <div class="message-preview" id="accept-preview">
-                                <strong>Aperçu :</strong><br>
-                                Le message sera envoyé à ${proposal.email}
-                            </div>
-                        </div>
-                        
-                        <div class="modal-actions">
-                            <button class="modal-btn modal-btn-cancel" onclick="closeModal('acceptModal')">
-                                ANNULER
-                            </button>
-                            <button class="modal-btn modal-btn-accept" onclick="confirmAccept('${proposal.id}')">
-                                ✅ VALIDER L'ACCEPTATION
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Update character count
-            const textarea = document.getElementById('modal-accept-message');
-            const charCount = document.getElementById('accept-char-count');
-            const updateCount = () => {
-                charCount.textContent = textarea.value.length;
-            };
-            textarea.addEventListener('input', updateCount);
-            updateCount();
-            
-            // Close on overlay click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal('acceptModal');
-                }
-            });
-        }
-        
-        function showRejectModal(proposal) {
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay active';
-            modal.id = 'rejectModal';
-            
-            modal.innerHTML = `
-                <div class="modal">
-                    <div class="modal-header">
-                        <h3>❌ Refuser la proposition</h3>
-                        <div class="modal-subheader">Envoyez un message personnalisé</div>
-                        <button class="modal-close" onclick="closeModal('rejectModal')">×</button>
-                    </div>
-                    
-                    <div class="modal-body">
-                        <div class="modal-section">
-                            <div class="modal-section-title">📋 Informations du joueur</div>
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <div class="info-label">Pseudo</div>
-                                    <div class="info-value">${proposal.pseudo}</div>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-label">Email</div>
-                                    <div class="info-value">${proposal.email}</div>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-label">Jeu</div>
-                                    <div class="info-value">${proposal.gameName}</div>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-label">Date proposée</div>
-                                    <div class="info-value">${formatDate(proposal.date)} à ${proposal.time}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modal-section">
-                            <div class="modal-section-title">✉️ Raison du refus</div>
-                            
-                            <div class="modal-form-group">
-                                <label>MODÈLE DE MESSAGE</label>
-                                <select id="reject-template" onchange="updateRejectMessage('${proposal.pseudo}', '${proposal.gameName}')">
-                                    <option value="custom">Message personnalisé</option>
-                                    <option value="busy">Déjà occupé ce jour-là</option>
-                                    <option value="schedule">Planning trop chargé</option>
-                                    <option value="game">Ne joue pas à ce jeu actuellement</option>
-                                    <option value="later">Peut-être plus tard</option>
-                                </select>
-                            </div>
-                            
-                            <div class="modal-form-group">
-                                <label>MESSAGE PERSONNALISÉ</label>
-                                <textarea id="modal-reject-message" rows="6" maxlength="500">Salut ${proposal.pseudo},
-
-Merci pour ta proposition pour jouer à ${proposal.gameName} !
-
-Malheureusement, je ne peux pas accepter cette session pour le moment.
-
-N'hésite pas à me reproposer une autre date ! 😊</textarea>
-                                <div class="char-count"><span id="reject-char-count">0</span>/500</div>
-                            </div>
-                            
-                            <div class="message-preview">
-                                <strong>Aperçu :</strong><br>
-                                Le message sera envoyé à ${proposal.email}
-                            </div>
-                        </div>
-                        
-                        <div class="modal-actions">
-                            <button class="modal-btn modal-btn-cancel" onclick="closeModal('rejectModal')">
-                                ANNULER
-                            </button>
-                            <button class="modal-btn modal-btn-reject" onclick="confirmReject('${proposal.id}')">
-                                ❌ CONFIRMER LE REFUS
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Update character count
-            const textarea = document.getElementById('modal-reject-message');
-            const charCount = document.getElementById('reject-char-count');
-            const updateCount = () => {
-                charCount.textContent = textarea.value.length;
-            };
-            textarea.addEventListener('input', updateCount);
-            updateCount();
-            
-            // Close on overlay click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal('rejectModal');
-                }
-            });
-        }
-        
-        function updateRejectMessage(pseudo, gameName) {
-            const template = document.getElementById('reject-template').value;
-            const textarea = document.getElementById('modal-reject-message');
-            
-            const templates = {
-                busy: `Salut ${pseudo},
-
-Merci pour ta proposition pour jouer à ${gameName} !
-
-Je suis déjà occupé à cette date malheureusement. 
-
-Repropose-moi une autre date si tu veux ! 😊`,
-                schedule: `Hey ${pseudo} !
-
-Merci pour l'invitation à ${gameName} !
-
-Mon planning est un peu chargé en ce moment, je ne peux pas m'engager sur cette session.
-
-On se refait ça bientôt ! 🎮`,
-                game: `Salut ${pseudo},
-
-Merci pour ta proposition !
-
-Je ne joue pas trop à ${gameName} en ce moment, du coup je vais passer pour cette session.
-
-Hésite pas à proposer d'autres jeux ! 👍`,
-                later: `Hey ${pseudo} !
-
-Merci pour l'invitation à ${gameName} !
-
-Je ne peux pas pour cette fois-ci, mais n'hésite pas à me reproposer plus tard !
-
-À bientôt ! 🎮`
-            };
-            
-            if (template !== 'custom' && templates[template]) {
-                textarea.value = templates[template];
-                // Trigger input event to update character count
-                textarea.dispatchEvent(new Event('input'));
-            }
-        }
-        
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('active');
-                setTimeout(() => {
-                    modal.remove();
-                }, 300);
-            }
-        }
-        
-        function confirmAccept(id) {
-            const proposal = proposals.find(p => p && p.id === id);
-            if (!proposal) {
-                showNotification('❌ Proposition introuvable', 'error');
-                return;
-            }
-            
-            // Récupérer les données modifiées
-            const newDate = document.getElementById('modal-accept-date').value;
-            const newTime = document.getElementById('modal-accept-time').value;
-            const message = document.getElementById('modal-accept-message').value;
-            
-            // Mettre à jour la proposition
-            proposal.status = 'accepted';
-            proposal.date = newDate;
-            proposal.time = newTime;
-            proposal.acceptMessage = message;
-            
-            saveProposals();
-            
-            // Envoyer à Netlify avec le message pour Discord
-            syncWithNetlify('update', {
-                id: proposal.id,
-                status: 'accepted',
-                pseudo: proposal.pseudo,
-                gameName: proposal.gameName,
-                date: proposal.date,
-                time: proposal.time,
-                newDate: newDate,
-                newTime: newTime,
-                message: message
-            });
-            
-            closeModal('acceptModal');
-            render();
-            
-            showNotification(`✅ Session acceptée ! DM Discord envoyé à @${proposal.pseudo}`, 'success');
-            console.log('📧 Message Discord à envoyer:', message);
-            console.log('📧 Destinataire Discord:', '@' + proposal.pseudo);
-        }
-        
-        function confirmReject(id) {
-            const proposal = proposals.find(p => p && p.id === id);
-            if (!proposal) {
-                showNotification('❌ Proposition introuvable', 'error');
-                return;
-            }
-            
-            // Récupérer le message
-            const message = document.getElementById('modal-reject-message').value;
-            
-            // Mettre à jour la proposition
-            proposal.status = 'rejected';
-            proposal.rejectMessage = message;
-            
-            saveProposals();
-            
-            // Envoyer à Netlify avec le message pour Discord
-            syncWithNetlify('update', {
-                id: proposal.id,
-                status: 'rejected',
-                pseudo: proposal.pseudo,
-                gameName: proposal.gameName,
-                date: proposal.date,
-                time: proposal.time,
-                message: message
-            });
-            
-            closeModal('rejectModal');
-            render();
-            
-            showNotification(`Session refusée - DM Discord envoyé à @${proposal.pseudo}`, 'success');
-            console.log('📧 Message de refus Discord:', message);
-            console.log('📧 Destinataire Discord:', '@' + proposal.pseudo);
-        }
-
-        function logout() {
-            setAuthenticated(false);
-            showPublicForm();
-            showNotification('Déconnexion réussie', 'success');
-        }
-
-        function showPublicForm() {
-            currentView = 'public';
-            render();
-        }
-
-        function showLogin() {
-            currentView = 'login';
-            render();
-        }
-
-        function showAdminDashboard() {
-            if (isAuthenticated()) {
-                currentView = 'admin';
-                render();
-            } else {
-                showLogin();
-            }
-        }
-
-        // Main Render Function
-        function render() {
-            const app = document.getElementById('app');
-            
-            if (currentView === 'public') {
-                app.innerHTML = renderPublicForm();
-                const today = new Date().toISOString().split('T')[0];
-                document.getElementById('gameDate').min = today;
-                document.getElementById('proposalForm').addEventListener('submit', handleProposalSubmit);
-            } else if (currentView === 'login') {
-                app.innerHTML = renderLogin();
-                document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            } else if (currentView === 'admin') {
-                app.innerHTML = renderAdminDashboard();
-            }
-        }
-
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', () => {
-            if (isAuthenticated()) {
-                showAdminDashboard();
-            } else {
-                showPublicForm();
-            }
-        });
-
-        // Make functions global
-        window.showLogin = showLogin;
-        window.showPublicForm = showPublicForm;
-        window.logout = logout;
-        window.acceptProposal = acceptProposal;
-        window.rejectProposal = rejectProposal;
-        window.closeModal = closeModal;
-        window.confirmAccept = confirmAccept;
-        window.confirmReject = confirmReject;
-        window.updateRejectMessage = updateRejectMessage;
-    </script>
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+  </script>
 </body>
 </html>

@@ -1,18 +1,19 @@
 {
-  "name": "gaming-hub-propositions",
-  "version": "1.0.0",
-  "description": "Application de gestion des propositions de jeux avec DM Discord automatiques",
+  "name": "automation-hub",
+  "version": "2.0.0",
+  "description": "Hub d'automatisation complet - Gaming Propositions + Steam Calendar",
   "main": "index.js",
   "scripts": {
     "dev": "netlify dev",
     "build": "echo 'Build complete'"
   },
-  "keywords": ["discord", "gaming", "propositions"],
+  "keywords": ["discord", "steam", "calendar", "gaming", "automation"],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.14.1",
-    "node-fetch": "^2.7.0"
+    "@supabase/supabase-js": "^2.39.0",
+    "node-fetch": "^2.7.0",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {}
 }
