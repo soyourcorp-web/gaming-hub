@@ -1,28 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-        
-        const SUPABASE_URL = '';  // Laisser vide pour l'instant
-        const SUPABASE_KEY = '';  // Laisser vide pour l'instant
-        const CONFIG = {
-    SUPABASE_URL: '', // Sera rempli par l'utilisateur
-    SUPABASE_KEY: '', // Sera rempli par l'utilisateur  
-    ADMIN_PASSWORD: 'elbe2024'
-};
-        let supabase = null;
-
-        function initSupabase() {
-    if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_KEY) {
-        supabase = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-        console.log('✅ Supabase initialisé');
-    } else {
-        console.warn('⚠️ Supabase non configuré - mode localStorage');
-    }
-}
-        
-        initSupabase();
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gaming Hub - Propositions</title>
@@ -962,50 +940,15 @@
         const AUTH_KEY = 'adminAuth';
         
         // Utility Functions
-        async function loadProposals() {
-    // Si Supabase configuré
-    if (supabase) {
-        try {
-            const { data, error } = await supabase
-                .from('propositions')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (error) throw error;
-            
-            // Convertir format Supabase vers format app
-            return data.map(p => ({
-                id: p.id,
-                pseudo: p.pseudo,
-                email: p.email,
-                gameName: p.game_name,
-                gameLink: p.game_link,
-                date: p.date,
-                time: p.time,
-                notes: p.notes,
-                status: p.status,
-                createdAt: p.created_at
-            }));
-        } catch (error) {
-            console.error('Erreur Supabase:', error);
-            // Fallback localStorage
-            return loadFromLocalStorage();
+        function loadProposals() {
+            try {
+                const stored = localStorage.getItem(PROPOSALS_KEY);
+                return stored ? JSON.parse(stored) : [];
+            } catch (error) {
+                console.error('Erreur chargement propositions:', error);
+                return [];
+            }
         }
-    }
-    
-    // Sinon localStorage
-    return loadFromLocalStorage();
-}
-
-function loadFromLocalStorage() {
-    try {
-        const stored = localStorage.getItem('gameProposals');
-        return stored ? JSON.parse(stored) : [];
-    } catch (error) {
-        console.error('Erreur localStorage:', error);
-        return [];
-    }
-}
         
         // App State
         let currentView = 'public';
@@ -1023,36 +966,9 @@ function loadFromLocalStorage() {
             }, 3000);
         }
 
-        async function saveProposal(proposal) {
-    // Sauvegarder dans Supabase
-    if (supabase) {
-        try {
-            const { data, error } = await supabase
-                .from('propositions')
-                .insert([{
-                    pseudo: proposal.pseudo,
-                    email: proposal.email,
-                    game_name: proposal.gameName,
-                    game_link: proposal.gameLink,
-                    date: proposal.date,
-                    time: proposal.time,
-                    notes: proposal.notes,
-                    status: 'pending'
-                }])
-                .select();
-            
-            if (error) throw error;
-            
-            console.log('✅ Proposition sauvegardée dans Supabase');
-            return data[0];
-        } catch (error) {
-            console.error('Erreur Supabase:', error);
+        function saveProposals() {
+            localStorage.setItem(PROPOSALS_KEY, JSON.stringify(proposals));
         }
-    }
-    
-    // Fallback localStorage
-    localStorage.setItem('gameProposals', JSON.stringify(proposals));
-}
         
         function isGoogleSheetsEnabled() {
             return GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.length > 0 && 
@@ -1641,78 +1557,48 @@ Je ne peux pas pour cette fois-ci, mais n'hésite pas à me reproposer plus tard
                 }, 300);
             }
         }
-        async function confirmAccept(id) {
-    const proposal = proposals.find(p => p && p.id === id);
-    if (!proposal) {
-        showNotification('❌ Proposition introuvable', 'error');
-        return;
-    }
-    
-    const newDate = document.getElementById('modal-accept-date').value;
-    const newTime = document.getElementById('modal-accept-time').value;
-    const message = document.getElementById('modal-accept-message').value;
-    
-    // 1. Mettre à jour dans Supabase
-    if (supabase) {
-        await supabase
-            .from('propositions')
-            .update({
+        
+        function confirmAccept(id) {
+            const proposal = proposals.find(p => p && p.id === id);
+            if (!proposal) {
+                showNotification('❌ Proposition introuvable', 'error');
+                return;
+            }
+            
+            // Récupérer les données modifiées
+            const newDate = document.getElementById('modal-accept-date').value;
+            const newTime = document.getElementById('modal-accept-time').value;
+            const message = document.getElementById('modal-accept-message').value;
+            
+            // Mettre à jour la proposition
+            proposal.status = 'accepted';
+            proposal.date = newDate;
+            proposal.time = newTime;
+            proposal.acceptMessage = message;
+            
+            saveProposals();
+            
+            // Envoyer à Google Sheets avec le message pour Discord
+            syncWithGoogleSheets('update', {
+                id: proposal.id,
                 status: 'accepted',
-                date: newDate,
-                time: newTime,
-                message: message
-            })
-            .eq('id', id);
-    }
-    
-    // 2. Envoyer DM Discord
-    try {
-        await fetch('/.netlify/functions/discord-dm', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
                 pseudo: proposal.pseudo,
                 gameName: proposal.gameName,
-                status: 'accepted',
+                date: proposal.date,
+                time: proposal.time,
                 newDate: newDate,
                 newTime: newTime,
                 message: message
-            })
-        });
-        console.log('✅ DM Discord envoyé');
-    } catch (error) {
-        console.error('Erreur Discord:', error);
-    }
-    
-    // 3. Ajouter au Google Calendar
-    try {
-        await fetch('/.netlify/functions/google-calendar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                title: `🎮 ${proposal.gameName} avec ${proposal.pseudo}`,
-                date: newDate,
-                time: newTime,
-                description: `Session de jeu avec ${proposal.pseudo}\n\nNotes: ${proposal.notes || 'Aucune'}`
-            })
-        });
-        console.log('✅ Ajouté au calendrier');
-    } catch (error) {
-        console.error('Erreur Calendar:', error);
-    }
-    
-    closeModal('acceptModal');
-    await loadAndRender();
-    showNotification(`✅ Session acceptée ! DM envoyé à @${proposal.pseudo}`, 'success');
-}
-
-
-
-
-<div class="back-btn-container" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
-    <a href="/" class="back-btn">← Retour au Hub</a>
-</div>
-
+            });
+            
+            closeModal('acceptModal');
+            render();
+            
+            showNotification(`✅ Session acceptée ! DM Discord envoyé à @${proposal.pseudo}`, 'success');
+            console.log('📧 Message Discord à envoyer:', message);
+            console.log('📧 Destinataire Discord:', '@' + proposal.pseudo);
+        }
+        
         function confirmReject(id) {
             const proposal = proposals.find(p => p && p.id === id);
             if (!proposal) {
