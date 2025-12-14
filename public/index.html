@@ -1,69 +1,658 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <base target="_top">
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Automation Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Rajdhani', sans-serif;
-      background: #000;
-      color: #fff;
+      background: #000000;
+      color: #FFFFFF;
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .grid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0, 128, 255, 0.03) 50px, rgba(0, 128, 255, 0.03) 51px),
+        repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0, 128, 255, 0.03) 50px, rgba(0, 128, 255, 0.03) 51px);
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    .holographic-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 128, 255, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .landing-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 128, 255, 0.3);
+      z-index: 100;
+      padding: 20px 7.6923%;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-section {
+      position: relative;
+    }
+
+    .logo-glow {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: radial-gradient(circle, rgba(0, 128, 255, 0.4) 0%, transparent 70%);
+      filter: blur(15px);
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: #00D4FF;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ff00;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+      box-shadow: 0 0 10px #00ff00;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .status-text {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .hero-section {
+      padding: 180px 7.6923% 100px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .title-container {
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    .container {
-      max-width: 1200px;
-      padding: 40px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3em;
-      color: #00D4FF;
-      margin-bottom: 60px;
-      letter-spacing: 8px;
-    }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
+      margin-bottom: 40px;
     }
-    .card {
-      background: rgba(0, 20, 40, 0.6);
-      border: 2px solid #00D4FF;
-      padding: 40px;
+
+    .title-line {
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation: lineExpand 2s ease-in-out infinite;
+    }
+
+    @keyframes lineExpand {
+      0%, 100% { transform: scaleX(1); opacity: 0.5; }
+      50% { transform: scaleX(1.2); opacity: 1; }
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      color: #FFFFFF;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 30px rgba(0, 212, 255, 0.8); }
+      50% { text-shadow: 0 0 50px rgba(0, 212, 255, 1); }
+    }
+
+    .apps-section {
+      padding: 80px 7.6923% 120px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .holographic-tablet {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      background: rgba(0, 20, 40, 0.4);
+      backdrop-filter: blur(20px);
+      padding: 60px;
+      box-shadow: 
+        0 0 60px rgba(0, 212, 255, 0.3),
+        inset 0 0 60px rgba(0, 212, 255, 0.1);
+    }
+
+    .tablet-border-top,
+    .tablet-border-right,
+    .tablet-border-bottom,
+    .tablet-border-left {
+      position: absolute;
+      background: linear-gradient(90deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation: borderScan 3s linear infinite;
+    }
+
+    .tablet-border-top {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+    }
+
+    .tablet-border-right {
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation-delay: 0.75s;
+    }
+
+    .tablet-border-bottom {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      animation-delay: 1.5s;
+    }
+
+    .tablet-border-left {
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      animation-delay: 2.25s;
+    }
+
+    @keyframes borderScan {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    .tablet-corners .corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #00D4FF;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    }
+
+    .corner-tl {
+      top: -2px;
+      left: -2px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .corner-tr {
+      top: -2px;
+      right: -2px;
+      border-left: none;
+      border-bottom: none;
+    }
+
+    .corner-bl {
+      bottom: -2px;
+      left: -2px;
+      border-right: none;
+      border-top: none;
+    }
+
+    .corner-br {
+      bottom: -2px;
+      right: -2px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+    }
+
+    .app-card {
+      position: relative;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 32px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: cardFadeIn 0.6s ease forwards;
+      border: 1px solid rgba(0, 212, 255, 0.2);
       text-decoration: none;
-      color: #fff;
       display: block;
-      transition: all 0.3s;
+      color: inherit;
     }
-    .card:hover {
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .app-card:nth-child(1) { animation-delay: 0s; }
+    .app-card:nth-child(2) { animation-delay: 0.1s; }
+    .app-card:nth-child(3) { animation-delay: 0.2s; }
+
+    .app-card.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .app-card:not(.disabled):hover {
       transform: translateY(-5px);
+      border-color: #00D4FF;
       box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
     }
-    .card h2 {
+
+    .card-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .app-card:hover .card-border {
+      border-color: #00D4FF;
+      box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .card-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    .app-card:hover .card-glow {
+      width: 200%;
+      height: 200%;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      font-size: 32px;
       color: #00D4FF;
-      margin-bottom: 15px;
-      font-size: 1.5em;
+      padding: 12px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4D4D4D;
+    }
+
+    .status-indicator.active {
+      background: #00D4FF;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    .card-status-text {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+
+    .card-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
+    }
+
+    .card-action {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: #00D4FF;
+      border: 2px solid #00D4FF;
+      border-radius: 0;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .app-card:hover .card-action {
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .landing-footer {
+      position: relative;
+      z-index: 2;
+      padding: 40px 7.6923% 60px;
+    }
+
+    .footer-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #00D4FF 50%, transparent 100%);
+      margin-bottom: 40px;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-text {
+      text-align: center;
+    }
+
+    .footer-text p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    .footer-logo {
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-img {
+      height: 60px;
+      opacity: 0.9;
+      transition: all 0.3s ease;
+    }
+
+    .footer-logo-img:hover {
+      opacity: 1;
+      filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .landing-header {
+        padding: 20px;
+      }
+      
+      .nav-links {
+        gap: 16px;
+      }
+      
+      .hero-section {
+        padding: 140px 20px 80px;
+      }
+      
+      .hero-title {
+        font-size: 32px;
+        letter-spacing: 4px;
+      }
+      
+      .holographic-tablet {
+        padding: 30px 20px;
+      }
+      
+      .apps-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>AUTOMATION HUB</h1>
-    <div class="cards">
-      <a href="/gaming-hub.html" class="card">
-        <h2>🎮 Gaming Hub</h2>
-        <p>Propositions de jeux + Discord</p>
-      </a>
-      <a href="/steam-calendar.html" class="card">
-        <h2>📅 Steam Calendar</h2>
-        <p>Sync Steam → Google Calendar</p>
-      </a>
+  <div class="grid-background"></div>
+  <div class="holographic-overlay"></div>
+
+  <header class="landing-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo-glow"></div>
+        <h1 class="brand-title">AUTOMATION HUB</h1>
+      </div>
+      <nav class="nav-links">
+        <div class="status-text">
+          <span class="status-dot"></span>
+          EN LIGNE
+        </div>
+        <div class="status-text" id="datetime"></div>
+      </nav>
     </div>
-  </div>
+  </header>
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="title-container">
+        <div class="title-line"></div>
+        <h2 class="hero-title">SÉLECTIONNEZ VOTRE APPLICATION</h2>
+        <div class="title-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="apps-section">
+    <div class="holographic-tablet">
+      <div class="tablet-border-top"></div>
+      <div class="tablet-border-right"></div>
+      <div class="tablet-border-bottom"></div>
+      <div class="tablet-border-left"></div>
+      
+      <div class="apps-grid">
+        <!-- Gaming Hub Propositions -->
+        <a href="/gaming-hub.html" class="app-card">
+          <div class="card-border"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-header">
+            <div class="card-icon">🎮</div>
+            <div class="card-status">
+              <div class="status-indicator active"></div>
+              <span class="card-status-text">ACTIF</span>
+            </div>
+          </div>
+          
+          <h3 class="card-title">Gaming Hub</h3>
+          <p class="card-description">Gérez les propositions de jeux avec envoi automatique de DM Discord et synchronisation calendrier</p>
+          
+          <div class="card-action">
+            LANCER L'APPLICATION ›
+          </div>
+        </a>
+
+        <!-- Steam Calendar -->
+        <a href="/steam-calendar.html" class="app-card">
+          <div class="card-border"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-header">
+            <div class="card-icon">📅</div>
+            <div class="card-status">
+              <div class="status-indicator active"></div>
+              <span class="card-status-text">ACTIF</span>
+            </div>
+          </div>
+          
+          <h3 class="card-title">Calendrier Steam</h3>
+          <p class="card-description">Synchronisez automatiquement les dates de sortie des jeux Steam avec votre Google Calendar</p>
+          
+          <div class="card-action">
+            LANCER L'APPLICATION ›
+          </div>
+        </a>
+
+        <!-- Prochainement -->
+        <div class="app-card disabled">
+          <div class="card-border"></div>
+          <div class="card-glow"></div>
+          
+          <div class="card-header">
+            <div class="card-icon">⚡</div>
+            <div class="card-status">
+              <div class="status-indicator"></div>
+              <span class="card-status-text">BIENTÔT DISPONIBLE</span>
+            </div>
+          </div>
+          
+          <h3 class="card-title">Prochainement</h3>
+          <p class="card-description">De nouveaux outils d'automatisation sont en cours de développement</p>
+        </div>
+      </div>
+      
+      <div class="tablet-corners">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="footer-divider"></div>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="https://drive.google.com/uc?export=view&id=1jwiHkCoHYDEf4R7ir91aELRmcyp_vwFk" alt="SoYour Corp" class="footer-logo-img">
+      </div>
+      <div class="footer-text">
+        <p>© 2025 SoYour Corp. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updateDateTime() {
+      var now = new Date();
+      var timeString = now.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('datetime').textContent = timeString;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+  </script>
 </body>
 </html>
