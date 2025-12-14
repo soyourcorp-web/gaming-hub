@@ -1,19 +1,11 @@
 {
   "name": "automation-hub",
   "version": "2.0.0",
-  "description": "Hub d'automatisation complet - Gaming Propositions + Steam Calendar",
-  "main": "index.js",
-  "scripts": {
-    "dev": "netlify dev",
-    "build": "echo 'Build complete'"
-  },
-  "keywords": ["discord", "steam", "calendar", "gaming", "automation"],
-  "author": "",
-  "license": "MIT",
+  "description": "Hub d'automatisation - Gaming + Steam Calendar",
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
     "node-fetch": "^2.7.0",
-    "date-fns": "^2.30.0"
-  },
-  "devDependencies": {}
+    "date-fns": "^2.30.0",
+    "google-auth-library": "^9.0.0"
+  }
 }

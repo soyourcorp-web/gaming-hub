@@ -1,7 +1,34 @@
 const fetch = require('node-fetch');
+const { JWT } = require('google-auth-library');
 
 const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID || 'elbepoly@gmail.com';
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
+
+let cachedToken = null;
+let tokenExpiry = null;
+
+async function getAccessToken() {
+  // Vérifier si on a un token en cache valide
+  if (cachedToken && tokenExpiry && Date.now() < tokenExpiry) {
+    return cachedToken;
+  }
+
+  // Créer un nouveau JWT client
+  const client = new JWT({
+    email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    scopes: ['https://www.googleapis.com/auth/calendar']
+  });
+
+  // Obtenir le token
+  const tokens = await client.authorize();
+  
+  cachedToken = tokens.access_token;
+  tokenExpiry = Date.now() + (tokens.expiry_date - Date.now() - 60000); // 1 min avant expiration
+  
+  return cachedToken;
+}
 
 exports.handler = async (event, context) => {
   const headers = {
@@ -35,9 +62,12 @@ exports.handler = async (event, context) => {
       };
     }
 
-    if (!GOOGLE_API_KEY) {
-      throw new Error('Google API Key non configurée');
+    if (!GOOGLE_SERVICE_ACCOUNT_EMAIL || !GOOGLE_PRIVATE_KEY) {
+      throw new Error('Service Account non configuré');
     }
+
+    // Obtenir le token d'accès
+    const accessToken = await getAccessToken();
 
     // Créer l'événement
     const eventDate = new Date(data.date);
@@ -71,12 +101,13 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Appeler l'API Google Calendar
+    // Appeler l'API Google Calendar avec OAuth2
     const response = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?key=${GOOGLE_API_KEY}`,
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events`,
       {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(calendarEvent)
