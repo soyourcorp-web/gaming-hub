@@ -636,6 +636,17 @@
   </footer>
 
   <script>
+// ========================================
+// CONFIGURATION
+// ========================================
+// Pour activer le stockage Supabase des jeux sans date,
+// remplissez ces variables (voir section Supabase plus bas dans le code)
+
+const submitBtn = document.getElementById('submitBtn');
+const btnText = document.getElementById('btnText');
+const btnSpinner = document.getElementById('btnSpinner');
+const resultPanel = document.getElementById('resultPanel');
+
 async function handleSubmit(event) {
     event.preventDefault();
     
@@ -685,7 +696,12 @@ async function handleSubmit(event) {
             }
         } else {
             // Pas de date - stocker dans Supabase
-            showInfo(`${steamData.title} - Date à déterminer\nStocké pour suivi ultérieur`);
+            const stored = await storeSteamGameInSupabase(steamData, steamUrl);
+            if (stored) {
+                showInfo(`${steamData.title}\n📊 Stocké dans la base de données pour suivi ultérieur\n🔔 Vous serez notifié quand une date sera disponible`);
+            } else {
+                showInfo(`${steamData.title}\n⚠️ Date à déterminer`);
+            }
         }
         
         document.getElementById('steamUrl').value = '';
@@ -769,6 +785,52 @@ async function handleSubmit(event) {
         });
       } catch (e) {
         return dateString;
+      }
+    }
+
+    // ========================================
+    // STOCKAGE SUPABASE via Netlify Function
+    // ========================================
+    async function storeSteamGameInSupabase(gameData, url) {
+      try {
+        // Extraire l'App ID de l'URL
+        const match = url.match(/\/app\/(\d+)/);
+        const appId = match ? match[1] : null;
+
+        if (!appId) {
+          console.error('❌ Impossible d\'extraire l\'App ID');
+          return false;
+        }
+
+        // Appeler la Netlify Function
+        const response = await fetch('/.netlify/functions/store-steam-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            appId: appId,
+            title: gameData.title,
+            releaseDate: gameData.releaseDate || null,
+            url: url
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          if (result.alreadyExists) {
+            console.log('ℹ️ Jeu déjà en base de données');
+          } else {
+            console.log('✅ Jeu stocké dans Supabase');
+          }
+          return true;
+        } else {
+          console.error('❌ Erreur stockage:', result.error);
+          return false;
+        }
+
+      } catch (error) {
+        console.error('❌ Erreur storeSteamGameInSupabase:', error);
+        return false;
       }
     }
   </script>
