@@ -41,17 +41,19 @@ exports.handler = async (event, context) => {
 
     // Créer l'événement
     const eventDate = new Date(data.date);
-    
     const calendarEvent = {
       summary: data.title,
       description: data.description || '',
-      start: {},
-      end: {},
+      start: {
+        date: eventDate.toISOString().split('T')[0]
+      },
+      end: {
+        date: eventDate.toISOString().split('T')[0]
+      },
       transparency: 'transparent'
     };
 
     if (data.time) {
-      // Événement avec horaire spécifique
       const [hours, minutes] = data.time.split(':');
       const startDateTime = new Date(eventDate);
       startDateTime.setHours(parseInt(hours), parseInt(minutes), 0);
@@ -66,14 +68,6 @@ exports.handler = async (event, context) => {
       calendarEvent.end = {
         dateTime: endDateTime.toISOString(),
         timeZone: 'America/Toronto'
-      };
-    } else {
-      // Événement toute la journée
-      calendarEvent.start = {
-        date: eventDate.toISOString().split('T')[0]
-      };
-      calendarEvent.end = {
-        date: eventDate.toISOString().split('T')[0]
       };
     }
 
