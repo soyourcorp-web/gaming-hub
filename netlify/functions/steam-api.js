@@ -59,10 +59,8 @@ async function fetchSteamData(url) {
   const appId = match[1];
   console.log('📊 App ID:', appId);
 
-  // Essayer l'API Steam d'abord
   let gameData = await fetchSteamDataAPI(appId);
   
-  // Si échec, essayer le scraping HTML
   if (!gameData.title) {
     console.log('⚠️ API failed, trying HTML scraping');
     gameData = await fetchSteamDataHTML(url);
@@ -130,7 +128,6 @@ function parseDateText(txt) {
   txt = txt.trim();
   console.log('🗓️ Parsing date:', txt);
 
-  // Rejeter dates vagues
   const vagueKeywords = [
     'a determiner', 'prochainement', 'bientot', 'soon', 'tba', 'tbd',
     'coming soon', 'a venir', 'to be announced'
@@ -144,13 +141,11 @@ function parseDateText(txt) {
     return null;
   }
 
-  // Rejeter années seules
   if (/^\d{4}$/.test(txt)) {
     console.log('→ Année seule');
     return null;
   }
 
-  // Format ISO (2025-09-15)
   const iso = txt.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
   if (iso) {
     const year = Number(iso[1]);
@@ -164,7 +159,6 @@ function parseDateText(txt) {
     }
   }
 
-  // Format texte (Jan 15, 2025)
   const months = {
     january: 1, jan: 1, janvier: 1,
     february: 2, feb: 2, fevrier: 2, février: 2,
@@ -208,7 +202,6 @@ function parseDateText(txt) {
     }
   }
 
-  // Tentative new Date()
   try {
     const date = new Date(txt);
     if (!isNaN(date.getTime())) {

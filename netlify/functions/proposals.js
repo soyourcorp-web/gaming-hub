@@ -27,9 +27,7 @@ exports.handler = async (event, context) => {
 
   try {
     const method = event.httpMethod;
-    const path = event.path;
 
-    // GET - Récupérer toutes les propositions
     if (method === 'GET') {
       const { data, error } = await supabase
         .from('propositions')
@@ -45,7 +43,6 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // POST - Créer une proposition
     if (method === 'POST') {
       const proposal = JSON.parse(event.body);
       
@@ -74,7 +71,6 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // PUT - Mettre à jour une proposition
     if (method === 'PUT') {
       const update = JSON.parse(event.body);
       
@@ -103,7 +99,6 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // DELETE - Supprimer une proposition
     if (method === 'DELETE') {
       const { id } = JSON.parse(event.body);
       

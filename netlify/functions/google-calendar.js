@@ -41,19 +41,17 @@ exports.handler = async (event, context) => {
 
     // Créer l'événement
     const eventDate = new Date(data.date);
-    const event = {
+    
+    const calendarEvent = {
       summary: data.title,
       description: data.description || '',
-      start: {
-        date: eventDate.toISOString().split('T')[0]
-      },
-      end: {
-        date: eventDate.toISOString().split('T')[0]
-      },
+      start: {},
+      end: {},
       transparency: 'transparent'
     };
 
     if (data.time) {
+      // Événement avec horaire spécifique
       const [hours, minutes] = data.time.split(':');
       const startDateTime = new Date(eventDate);
       startDateTime.setHours(parseInt(hours), parseInt(minutes), 0);
@@ -61,13 +59,21 @@ exports.handler = async (event, context) => {
       const endDateTime = new Date(startDateTime);
       endDateTime.setHours(startDateTime.getHours() + 2);
 
-      event.start = {
+      calendarEvent.start = {
         dateTime: startDateTime.toISOString(),
         timeZone: 'America/Toronto'
       };
-      event.end = {
+      calendarEvent.end = {
         dateTime: endDateTime.toISOString(),
         timeZone: 'America/Toronto'
+      };
+    } else {
+      // Événement toute la journée
+      calendarEvent.start = {
+        date: eventDate.toISOString().split('T')[0]
+      };
+      calendarEvent.end = {
+        date: eventDate.toISOString().split('T')[0]
       };
     }
 
@@ -79,7 +85,7 @@ exports.handler = async (event, context) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(event)
+        body: JSON.stringify(calendarEvent)
       }
     );
 
